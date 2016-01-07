@@ -1,2 +1,2 @@
-# Tombs---The-Card-Game
+# Tombs - The Card Game
 Original card game
