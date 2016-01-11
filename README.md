@@ -9,12 +9,12 @@ Classes:
 Blade:
 Threatens: horizontal and vertical adjacent tiles.
 Can be placed on an empty unthreatened tile.
-Creates tombstones from enemy units in its threatened zones.
+Creates tombstones from enemy units in its threat zones.
 
 Magus:
 Threatens: diagonal tiles.
 Can be placed on an empty unthreatened tile.
-Creates tombstones from enemy units in its threatened zones.
+Creates tombstones from enemy units in its threat zones.
 
 Ombra:
 Threatens: its own tile
@@ -27,18 +27,26 @@ Threatens: nothing
 Can be placed on an empty untreatened tile.
 Can also be activated if there is no thorn in adjacent tiles.
 
-Activation:
+Activated Thorn*:
 Can be placed on a tombstone while removing an adjacent enemy unit, as long as it is not threatened afterwards.
 The tombstone is therefore removed as well. This does not count as a kill.
 
-*You can play cards on a tile threatened by your own units. This actually adds a layer of protection!
+Turn actions:
+- Every player starts with 2 cards. Draw one everytime it is your turn (unless there are no cards left in the deck).
+- Play one character card unless there are no moves possible (you are stuck), in which case you discard a card.
 
-More rules:
-- Every player starts with 2 cards. Draw one everytime it is your turn.
-- Play one character card unless there are no moves possible, in which case you discard a card.
-
-As a result, here are some invariants:
-- a character will never kill another character of the same class
-- no friendly fire
+Remarks:
+- A character will never kill another character of the same class
+- No friendly fire
+- You can play cards on a tile threatened by your own units. This actually adds a layer of protection!
 
 Win conditions:
+1. Field lock: you win if every player besides yourself is stuck for one rotation of turns
+2. Kill count: first player to reach the kill goal wins
+   - 2 players: 8 kills
+   - 3 players: 7 kills
+   - 4 players: 6 kills
+3. Unit count: when all cards are played (no more cards in deck nor hands):
+   - player with most units on the board wins
+   - in case of a tie, player with most kills wins
+   - if it's still a tie, then it's a tie
