@@ -9,12 +9,12 @@ Classes:
 Blade (~ warrior):
 - Threatens: horizontal and vertical adjacent tiles.
 - Can be placed on an empty unthreatened tile.
-- Creates tombstones from enemy units in its threat zones.
+- Creates tombstones from enemy units in its threat zones. Each tombstone counts as a kill.
 
 Magus (~ mage):
 - Threatens: diagonal tiles.
 - Can be placed on an empty unthreatened tile.
-- Creates tombstones from enemy units in its threat zones.
+- Creates tombstones from enemy units in its threat zones. Each tombstone counts as a kill.
 
 Ombra (~ rogue):
 - Threatens: its own tile.
@@ -32,7 +32,7 @@ Activated Thorn*:
 - The tombstone is therefore removed as well. This does not count as a kill.
 
 Turn actions:
-- Every player starts with 2 cards. Draw one everytime it is your turn (unless there are no cards left in the deck).
+- Each player starts with 2 cards. Draw one everytime it is your turn (unless there are no cards left in the deck).
 - Play one character card unless there are no moves possible (you are stuck), in which case you discard a card.
 - The first player to go cannot play on the middle tile.
 - Players cannot make moves that kill or remove targets in the first x total turns of the game.
