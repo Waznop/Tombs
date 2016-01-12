@@ -273,9 +273,6 @@ class Game:
             truth = False
         return truth
 
-    # check1: board tile -> boolean
-    # checks if the tile can be placed* on the board
-
     '''
 
     Checking process:
@@ -286,6 +283,9 @@ class Game:
     4. movef (maybe killupdate)
 
     '''
+
+    # check1: board tile -> boolean
+    # checks if the tile can be placed* on the board
 
     def check1(self, b, t):
 
