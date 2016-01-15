@@ -195,7 +195,8 @@ class Game:
     # btile: board x-coord y-coord -> list of tiles
     # returns tiles in the threat zones of a Blade at (x,y)
 
-    def btile(self, b, x, y):
+    @staticmethod
+    def btile(b, x, y):
         lst = []
         if y < 2:
             lst = [b[x][y+1]] + lst  # down
@@ -210,7 +211,8 @@ class Game:
     # mtile1: board x-coord y-coord -> list of tiles
     # returns adjacent diagonal tiles to a character at (x,y)
 
-    def mtile1(self, b, x, y):
+    @staticmethod
+    def mtile1(b, x, y):
         lst = []
         if x < 2 and y < 2:
             lst = [b[x+1][y+1]] + lst  # dr
@@ -225,8 +227,9 @@ class Game:
     # mtile: board x-coord y-coord -> list of tiles
     # returns tiles in the threat zones of a Magus at (x,y)
 
-    def mtile(self, b, x, y):
-        lst = self.mtile1(b, x, y)
+    @staticmethod
+    def mtile(b, x, y):
+        lst = Game.mtile1(b, x, y)
         if x == 0 and y == 0:
             lst += [b[2][2]]
         elif x == 2 and y == 0:
@@ -240,13 +243,15 @@ class Game:
     # ttile: board x-coord y-coord -> list of tiles
     # returns tiles in the threat zones of a Thorn at (x,y)
 
-    def ttile(self, b, x, y):
-        return self.btile(b, x, y) + self.mtile1(b, x, y)
+    @staticmethod
+    def ttile(b, x, y):
+        return Game.btile(b, x, y) + Game.mtile1(b, x, y)
 
     # enemy: tile list-of-tiles unit -> boolean
     # returns whether there is a specific enemy unit to the given tile in the list of tiles
 
-    def enemy(self, t, lst, u):
+    @staticmethod
+    def enemy(t, lst, u):
         truth = False
         for x in lst:
             if x.type == u and x.owner != t.owner:
@@ -256,7 +261,8 @@ class Game:
     # target: tile list-of-tiles -> boolean
     # returns whether there is an enemy to the given tile in the list of tiles
 
-    def target(self, t, lst):
+    @staticmethod
+    def target(t, lst):
         truth = False
         for x in lst:
             if not (x.owner == t.owner or x.owner == 0):
@@ -266,7 +272,8 @@ class Game:
     # singletarget: tile1 tile2 -> boolean
     # returns whether tile2 is an enemy to tile1
 
-    def singletarget(self, t1, t2):
+    @staticmethod
+    def singletarget(t1, t2):
         if not (t2.owner == t1.owner or t2.owner == 0):
             truth = True
         else:
@@ -293,15 +300,15 @@ class Game:
             truth = False  # turn 1: cannot place in middle tile
 
         elif self.turnCount <= self.safeTurns \
-                and ((t.type == 5 and self.target(t, self.btile(b, t.x, t.y)))
-                     or (t.type == 4 and self.target(t, self.mtile(b, t.x, t.y)))):
+                and ((t.type == 5 and Game.target(t, Game.btile(b, t.x, t.y)))
+                     or (t.type == 4 and Game.target(t, Game.mtile(b, t.x, t.y)))):
             truth = False  # no violence turns
 
-        elif t.type == 2 and b[t.x][t.y].type == 1 and self.target(t, self.ttile(b, t.x, t.y)) \
-                and self.turnCount > self.safeTurns and not (self.enemy(t, self.ttile(b, t.x, t.y), 2)):
+        elif t.type == 2 and b[t.x][t.y].type == 1 and Game.target(t, Game.ttile(b, t.x, t.y)) \
+                and self.turnCount > self.safeTurns and not (Game.enemy(t, Game.ttile(b, t.x, t.y), 2)):
             truth = True  # activated Thorn on tombstone with target to kill and no adjacent enemy Thorn
 
-        elif t.type == 3 and self.target(t, [b[t.x][t.y]]) and b[t.x][t.y].type != 3 \
+        elif t.type == 3 and Game.target(t, [b[t.x][t.y]]) and b[t.x][t.y].type != 3 \
                 and self.turnCount > self.safeTurns:
             truth = True  # Ombra assassinating target
 
@@ -316,11 +323,12 @@ class Game:
     # thornkill: board tile x-coord y-coord -> board
     # updates the board by removing Thorn's target at (i, j)
 
-    def thornkill(self, b, t, i, j):
+    @staticmethod
+    def thornkill(b, t, i, j):
 
         new = []
 
-        for e in self.ttile(b, t.x, t.y):
+        for e in Game.ttile(b, t.x, t.y):
             if (e.x == i and e.y == j) and (not (e.owner == t.owner or e.owner == 0)):
                 new = copy.deepcopy(b)
                 new[i][j] = Tile(i, j, 0, 0)
@@ -334,10 +342,11 @@ class Game:
     # check2: board tile -> boolean
     # checks if the tile would be threatened by something after it is placed on the board
 
-    def check2(self, b, t):
-        if self.enemy(t, self.btile(b, t.x, t.y), 5):
+    @staticmethod
+    def check2(b, t):
+        if Game.enemy(t, Game.btile(b, t.x, t.y), 5):
             truth = False  # threatened by enemy Blade
-        elif self.enemy(t, self.mtile(b, t.x, t.y), 4):
+        elif Game.enemy(t, Game.mtile(b, t.x, t.y), 4):
             truth = False  # threatened by enemy Magus
         else:
             truth = True
@@ -346,17 +355,19 @@ class Game:
     # maketomb: tile list-of-tiles -> list-of-tiles
     # checks for the tile's kills in the input list and returns a list of tombstone tiles
 
-    def maketomb(self, t, lst):
+    @staticmethod
+    def maketomb(t, lst):
         lst1 = []
         for e in lst:
-            if self.singletarget(t, e):
+            if Game.singletarget(t, e):
                 lst1 = [Tile(e.x, e.y, 1, 0)] + lst1
         return lst1
 
     # update: board list-of-tiles -> board
     # returns board updated with tiles from the list
 
-    def update(self, b, lst):
+    @staticmethod
+    def update(b, lst):
         new = copy.deepcopy(b)
         for e in lst:
             new[e.x][e.y] = e
@@ -365,11 +376,12 @@ class Game:
     # killupdate: board tile -> board
     # returns board after checking for tombstones created
 
-    def killupdate(self, b, t):
+    @staticmethod
+    def killupdate(b, t):
         if t.type == 5:
-            new = self.update(b, self.maketomb(t, self.btile(b, t.x, t.y)))
+            new = Game.update(b, Game.maketomb(t, Game.btile(b, t.x, t.y)))
         elif t.type == 4:
-            new = self.update(b, self.maketomb(t, self.mtile(b, t.x, t.y)))
+            new = Game.update(b, Game.maketomb(t, Game.mtile(b, t.x, t.y)))
         else:
             new = copy.deepcopy(b)
         return new
@@ -381,7 +393,7 @@ class Game:
 
     def place(self, b, t, i, j):
         if (t.type == 2 and b[t.x][t.y].type == 1) and self.check1(b, t):
-            new = self.thornkill(b, t, i, j)
+            new = Game.thornkill(b, t, i, j)
         elif self.check1(b, t):
             new = copy.deepcopy(b)
             new[t.x][t.y] = t
@@ -390,11 +402,11 @@ class Game:
         return new
 
     # movef: board tile x-coord y-coord -> board
-    # purely functional one-turn action
+    # functional one-turn action
 
     def movef(self, b, t, i, j):
-        if self.check2(self.place(b, t, i, j), t):
-            new = self.killupdate(self.place(b, t, i, j), t)
+        if Game.check2(self.place(b, t, i, j), t):
+            new = Game.killupdate(self.place(b, t, i, j), t)
         else:
             raise Error("Zone is threatened.")
         return new
@@ -402,7 +414,8 @@ class Game:
     # nodupe: list -> list
     # removes duplicates from the list
 
-    def nodupe(self, lst):
+    @staticmethod
+    def nodupe(lst):
         seen = set()
         seen_add = seen.add
         return [x for x in lst if not (x in seen or seen_add(x))]
@@ -413,7 +426,7 @@ class Game:
     def choices(self, b, p):
 
         sol = []
-        for u in self.nodupe(p.hand):
+        for u in Game.nodupe(p.hand):
             for x in range(3):
                 for y in range(3):
 
@@ -453,9 +466,9 @@ class Game:
         # score incrementation
 
         if t.type == 5:
-            self.score[t.owner-1] += len(self.maketomb(t, self.btile(temp, t.x, t.y)))
+            self.score[t.owner-1] += len(Game.maketomb(t, Game.btile(temp, t.x, t.y)))
         elif t.type == 4:
-            self.score[t.owner-1] += len(self.maketomb(t, self.mtile(temp, t.x, t.y)))
+            self.score[t.owner-1] += len(Game.maketomb(t, Game.mtile(temp, t.x, t.y)))
 
     # hire: x-coord y-coord owner type
     # shortcut for move: normal character at (x,y)
@@ -472,7 +485,8 @@ class Game:
     # countUnits: board -> list-of-owners
     # returns list of owners who have the most units on the board
 
-    def countUnits(self, b):
+    @staticmethod
+    def countUnits(b):
 
         lst = []
         for i in range(3):
@@ -577,7 +591,7 @@ class Game:
             # win by units
 
             if self.turnCount == self.deck.nb:
-                win = self.compare(self.countUnits(self.board))
+                win = self.compare(Game.countUnits(self.board))
 
                 if isinstance(win, list):
                     print("It's a tie between Players " + str(win) + "!")
