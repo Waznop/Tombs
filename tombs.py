@@ -126,6 +126,17 @@ class Game:
         self.currentP = 1  # current player
         self.board = [[Tile(i, j, 0, 0) for j in range(3)] for i in range(3)]
         # initialize an empty board
+
+        '''
+
+        For testing purposes
+
+        self.board = [[Tile(0, 0, 3, 1), Tile(0, 1, 3, 2), Tile(0, 2, 3, 3)],
+                      [Tile(1, 0, 3, 4), Tile(1, 1, 3, 1), Tile(1, 2, 3, 2)],
+                      [Tile(2, 0, 0, 0), Tile(2, 1, 0, 0), Tile(2, 2, 0, 0)]]
+
+        '''
+        
         self.turnCount = 1
         self.stuckCount = 0  # to check for Field-lock win condition
 
@@ -402,7 +413,7 @@ class Game:
         return new
 
     # movef: board tile x-coord y-coord -> board
-    # functional one-turn action
+    # purely functional one-turn action
 
     def movef(self, b, t, i, j):
         if Game.check2(self.place(b, t, i, j), t):
@@ -534,6 +545,8 @@ class Game:
         # (for testing purposes)
         # print("Possible moves: ", self.choices(self.board, self.players[self.currentP-1]))
 
+        self.printBoard(self.board)
+
         if not self.choices(self.board, self.players[self.currentP - 1]):
 
             discard = eval(input("No possible moves for Player " + str(self.currentP) +
@@ -567,8 +580,6 @@ class Game:
                 raise Error("Unknown command.")
 
             self.stuckCount = 0
-
-            self.printBoard(self.board)
 
     # main code for the game's execution
     # includes the 3 win conditions
