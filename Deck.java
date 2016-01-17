@@ -4,6 +4,8 @@ import java.util.Stack;
 import java.util.Arrays;
 import java.util.Collections;
 
+// nbr: number of cards -> evenly distributed between the 4 character types
+
 public class Deck {
 	
 	private int nbr;
