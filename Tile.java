@@ -1,5 +1,7 @@
 package game;
 
+// ex: Tile(0, 1, 5, 1): Player 1's Blade at position (x,y) = (0,1)
+
 public class Tile {
 	
 	private int x;
