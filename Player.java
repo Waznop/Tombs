@@ -2,6 +2,8 @@ package game;
 
 import java.util.Vector;
 
+// index: player's identification
+
 public class Player {
 	
 	private int index;
@@ -30,13 +32,17 @@ public class Player {
 		hand.add(deck.topDeck());
 	}
 	
+	// undraw: in case of error in input -> rollback
+	
 	public void undraw (Deck deck) {
 		deck.putBack(hand.remove(hand.size()-1));
 	}
 	
+	// play1: removes a card of the specific unit from hand
+	
 	public void play1 (int unit) throws Exception {
 		if (hand.contains(unit)) {
-			hand.remove(unit);
+			hand.removeElement(unit);
 		} else {
 			throw new Exception("Card unavailable.");
 		}
@@ -46,7 +52,9 @@ public class Player {
 		return hand;
 	}
 	
-	public int CountUnits (Tile[][] b) {
+	// countUnits: counts how many units the player has on the board b
+	
+	public int countUnits (Tile[][] b) {
 		int count = 0;
 		
 		for (int i = 0; i < 3; i++) {
